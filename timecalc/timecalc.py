@@ -9,6 +9,9 @@ CALENDAR_DAY_FORMAT = "'%Y-%m-%d'"
 DATETIME_WITH_UTC_OFFSET_FORMAT = "%Y-%m-%d %H:%M:%S%z"
 DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
+logger = logging.getLogger()
+logging.basicConfig(level=logging.DEBUG, format="Timecalc: %(message)s")
+
 
 class GpsTime:
     """
@@ -112,7 +115,9 @@ def get_utc_time():
     """
     parser = argparse.ArgumentParser()
     dt_group = parser.add_mutually_exclusive_group()
-    parser.add_argument("--utc_offset", "-uo", type=float, help="UTC offset in hours [default: 0]")
+    parser.add_argument(
+        "--utc_offset", "-uo", type=float, help="UTC offset in hours [default: 0]"
+    )
     dt_group.add_argument(
         "--datetime",
         "-dt",
@@ -136,7 +141,7 @@ def get_utc_time():
     dt = None
 
     if args.utc_offset:
-        tz = timezone(offset=timedelta(args.utc_offfset))
+        tz = timezone(offset=timedelta(hours=args.utc_offset))
     else:
         tz = timezone.utc
 
@@ -149,12 +154,13 @@ def get_utc_time():
         dt = datetime.fromtimestamp(tz)
 
     elif args.datetime:
+        # attempt to parse the datetime string, both with and without a UTC offset specifier.
         try:
             dt = datetime.strptime(args.datetime, DATETIME_WITH_UTC_OFFSET_FORMAT)
         except ValueError as e:
-            logger.error(e)
             try:
                 dt = datetime.strptime(args.datetime, DATETIME_FORMAT)
+                dt = dt.replace(tzinfo=tz)
             except ValueError as e:
                 logger.error(e)
                 raise ValueError("Could not parse datetime argument.")
@@ -182,8 +188,5 @@ def timecalc():
 
 
 if __name__ == "__main__":
-
-    logger = logging.getLogger()
-    logging.basicConfig(level=logging.DEBUG, format="Timecalc: %(message)s")
 
     timecalc()

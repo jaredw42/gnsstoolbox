@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "gnsstoolbox-timecalc"
+version = "0.1.2"
+authors = [
+  { name="Jared Wilson", email="jared.t.wilson@gmail.com" },
+]
+description = "CLI tool for converting UTC to GPS Time"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+[project.scripts]
+gnsstimecalc="timecalc:timecalc"
+
+[project.urls]
+Homepage = "https://github.com/jaredw42/gnsstoolbox"
+Issues = "https://github.com/jaredw42/gnsstoolbox/issues"
