@@ -17,7 +17,7 @@ inline double degToRad(const double deg) {
 
 
 // Calculate the NED distance components between two LLH points
-inline PositionNED LLHToNED(const PositionLLH& pos1, const PositionLLH& pos2) {
+inline NorthEastDown LLHToNED(const PositionLLH& pos1, const PositionLLH& pos2) {
     // Convert latitude and longitude from degrees to radians
     const auto lat1 = degToRad(pos1.latitude);
     const auto lon1 = degToRad(pos1.longitude);
@@ -35,7 +35,7 @@ inline PositionNED LLHToNED(const PositionLLH& pos1, const PositionLLH& pos2) {
     double dHeight = pos2.ellipsoidHeight - pos1.ellipsoidHeight;
 
     // NED components
-    PositionNED ned;
+    NorthEastDown ned;
     ned.north = dLat * (kWgs84EarthSemiMaj * (1 - kWgs84ESquared)) / pow(1 - kWgs84ESquared * sinLat1 * sinLat1, 1.5);
     ned.east = dLon * N1 * cosLat1;
     ned.down = -dHeight;

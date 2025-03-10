@@ -3,8 +3,28 @@
 #include <cstdint>
 #include <variant>
 
+#include "position.h"
+
 class GnssDeviceInterface {
 public:
+
+class PvtFix {
+    public: 
+    PositionLLH position;
+    NorthEastDown position_error;
+    NorthEastDown velocity;
+    NorthEastDown velocity_error;
+    NorthEastDown position_covariance;
+    NorthEastDown velocity_covariance;
+    uint16_t estimated_horizontal_error;
+    uint16_t estimated_vertical_error;
+    uint32_t tow_ms; 
+    uint8_t num_svs;
+    uint8_t fix_type;
+
+
+};
+
     virtual ~GnssDeviceInterface() = default;
 
     using MessageType = std::variant<uint8_t, uint16_t>;

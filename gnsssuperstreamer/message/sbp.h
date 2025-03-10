@@ -5,6 +5,10 @@
 static constexpr uint8_t kSbpHeaderSize = 6;
 static constexpr uint8_t kSbpChecksumSize = 2;
 
+struct SbpMsgType {
+   static constexpr uint16_t MsgPosLlh = 0x020A;
+};
+
 struct SbpMessage {
     uint16_t msgType;
     uint16_t sender;

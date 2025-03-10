@@ -9,7 +9,7 @@ class PositionLLH {
 
 };
 
-class PositionNED {
+class NorthEastDown {
     public:
     double north;
     double east; 

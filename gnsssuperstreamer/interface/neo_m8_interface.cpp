@@ -38,8 +38,8 @@ namespace ubx {
         llh.ellipsoidHeight = msg.height * 1e-3;
         const auto posNed = LLHToNED(llh, truth_position_);
         std::cout << "Ublox time: " << msg.itow * 1e-3
-                  << " err north: " << posNed.north
-                  << " east: " << posNed.east
+                  << " err 2d: " << posNed.horizontal
+                  << " est err 2d: " << msg.horizontal_acc
                   << " svs used: " << static_cast<int>(msg.num_svs)
                   << std::endl;
     };
