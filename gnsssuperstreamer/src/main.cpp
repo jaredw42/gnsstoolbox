@@ -1,8 +1,9 @@
-#include <iostream>
 #include <boost/asio.hpp>
-#include "tcp.h"
+#include <iostream>
+
 #include "neo_m8_interface.h"
 #include "piksi_multi_interface.h"
+#include "tcp.h"
 
 int main(int argc, char* argv[]) {
     if (argc != 5) {

@@ -7,16 +7,16 @@
 #include "ubx.h"
 
 namespace ubx {
-    class NeoM8Interface : public GnssDeviceInterface {
-    public:
-        NeoM8Interface(const PositionLLH& position);
+class NeoM8Interface : public GnssDeviceInterface {
+   public:
+    NeoM8Interface(const PositionLLH& position);
 
-    protected:
-        void processDataImpl(uint16_t messageType, const std::vector<uint8_t>& payload) override;
+   protected:
+    void processDataImpl(uint16_t messageType, const std::vector<uint8_t>& payload) override;
 
-    private:
-        PositionLLH truth_position_;
+   private:
+    PositionLLH truth_position_;
 
-        void parseNavPvtMsg(const UbxNavPvtMessage& msg);
-    };
-}
+    void parseNavPvtMsg(const UbxNavPvtMessage& msg);
+};
+}  // namespace ubx

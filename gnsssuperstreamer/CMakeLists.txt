@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.10)
 set(CMAKE_C_COMPILER clang)
 set(CMAKE_CXX_COMPILER clang++)
-set(CMAKE_CXX_CLANG_TIDY)
+set(CMAKE_CXX_CLANG_TIDY "clang-tidy;-checks=*")
 # Set the project name and version
 project(gnsssuperstreamer VERSION 1.0 LANGUAGES CXX)
 

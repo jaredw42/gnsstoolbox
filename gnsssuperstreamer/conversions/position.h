@@ -1,20 +1,17 @@
 #pragma once
 
-
 class PositionLLH {
-    public:
+   public:
     double latitude;
-    double longitude; 
+    double longitude;
     double ellipsoidHeight;
-
 };
 
 class NorthEastDown {
-    public:
+   public:
     double north;
-    double east; 
+    double east;
     double down;
     double horizontal;
-    double spherical; 
+    double spherical;
 };
-
