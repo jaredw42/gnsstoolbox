@@ -1,6 +1,7 @@
 #include "piksi_multi_interface.h"
 
 #include <chrono>
+#include <fstream>
 #include <iomanip>
 #include <iostream>
 
@@ -14,11 +15,20 @@ void PiksiMultiInterface::processDataImpl(uint16_t messageType, const std::vecto
 
     switch (messageType) {
         case SbpMsgType::MsgPosLlh: {
+            // if (sizeof(payload) < sizeof(SbpMsgPosLlh)) {
+            //     std::cerr << "Payload size is too small for message type: " << messageType << std::endl;
+            //     std::cerr << "Payload size: " << sizeof(payload.data()) <<  " posllh size: " << sizeof(SbpMsgPosLlh)
+            //     <<std::endl; return;
+            // }
             const auto& msg = *reinterpret_cast<const SbpMsgPosLlh*>(payload.data());
             processMsgPosLlh(msg);
             break;
         }
         case SbpMsgType::MsgHeartbeat: {
+            if (sizeof(payload) < sizeof(SbpMsgHeartbeat)) {
+                std::cerr << "Payload size is too small for message type: " << messageType << std::endl;
+                return;
+            }
             const auto& msg = *reinterpret_cast<const SbpMsgHeartbeat*>(payload.data());
             processMsgHeartbeat(msg);
             break;
@@ -69,11 +79,31 @@ void PiksiMultiInterface::processMsgHeartbeat(const SbpMsgHeartbeat& msg) {
 
     std::cout << "Starling PVT time: " << current_fix_.tow_ms * 1e-3
               << " error 2D: " << current_fix_.position_error.horizontal
-              << " est error 2D:" << current_fix_.estimated_horizontal_error * 1e-3
+              << " est error 2D: " << current_fix_.estimated_horizontal_error * 1e-3
               << " svs used_for_nav: " << static_cast<int>(current_fix_.num_svs)
               << " heartbeat duration: " << heartbeat_data_.heartbeat_duration_ms
               << " system error: " << heartbeat_data_.system_error << " io_error: "
               << heartbeat_data_.io_error
               // << " antenna_short: " << heartbeat_data_.antenna_short
               << " antenna_connected: " << heartbeat_data_.antenna_connected << std::endl;
+    logMessage("pen15");
+}
+
+void PiksiMultiInterface::logMessage(const std::string& message) {
+    using namespace std;
+    std::ofstream logFile("/home/jared/jared/logs/piksi_multi.log", std::ios_base::app);  // Open file in append mode
+    string logmsg = "receiver: piksi_multi, gpstow_ms: " + to_string(current_fix_.tow_ms) + ", " +
+                    "error_horiz: " + to_string(current_fix_.position_error.horizontal) + ", " +
+                    "est_error_horiz: " + to_string(current_fix_.estimated_horizontal_error) + ", " +
+                    "svs_used: " + to_string(current_fix_.num_svs) + ", " +
+                    "heartbeat_duration: " + to_string(heartbeat_data_.heartbeat_duration_ms) + ", " +
+                    "system_error: " + to_string(heartbeat_data_.system_error) + ", " +
+                    "io_error: " + to_string(heartbeat_data_.io_error) + ", " +
+                    "antenna_connected: " + to_string(heartbeat_data_.antenna_connected);
+    if (logFile.is_open()) {
+        logFile << logmsg << std::endl;
+        logFile.close();  // Close the file
+    } else {
+        std::cerr << "Unable to open log file." << std::endl;
+    }
 }

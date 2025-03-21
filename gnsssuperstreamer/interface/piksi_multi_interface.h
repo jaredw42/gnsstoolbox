@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <string>
 #include <vector>
 
 #include "gnss_device_interface.h"
@@ -9,6 +10,7 @@
 class PiksiMultiInterface : public GnssDeviceInterface {
    public:
     PiksiMultiInterface(const PositionLLH& position);
+    void logMessage(const std::string& message);
 
    protected:
     void processDataImpl(uint16_t messageType, const std::vector<uint8_t>& payload) override;
